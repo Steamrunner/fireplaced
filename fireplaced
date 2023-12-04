@@ -71,7 +71,7 @@ do
                         xdotool sleep 0.5 key --clearmodifiers --delay 20 ctrl+a
                         xdotool sleep 0.5 key --clearmodifiers --delay 20 ctrl+a                        
 			
-			sleep 0.5
+			#sleep 0.5
 			# login fireplace
 			setxkbmap be
                 	xdotool type --clearmodifiers --delay 20 "fireplace" ;
