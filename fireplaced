@@ -66,7 +66,7 @@ do
 			echo "TEST y: " $((${screenxy[1]}/2)) >> $log				
 						
 			x=$((${screenxy[0]}/2))
-			y=$(((${screenxy[1]}/2)-60))
+			y=$(((${screenxy[1]}/2)-75))
 			
 			echo $x $y
 			
