@@ -72,6 +72,8 @@ do
 			
 			xdotool mousemove $x $y
                         xdotool getmouselocation >> $log			
+                        xdotool click
+                        xdotool key --clearmodifiers --delay 20 ctrl+a
 			
 			sleep 2
 			# login fireplace
