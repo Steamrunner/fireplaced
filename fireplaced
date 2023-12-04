@@ -73,8 +73,15 @@ xdotool getdisplaygeometry  >> $log
 			echo "TEST x: " ${screenxy[0]} >> $log
 			echo "TEST y: " ${screenxy[1]} >> $log			
 			
-			echo "TEST x: " ((${screenxy[0]}/2)) >> $log
-			echo "TEST y: " ((${screenxy[1]}/2)) >> $log				
+			echo "TEST x: " $((${screenxy[0]}/2)) >> $log
+			echo "TEST y: " $((${screenxy[1]}/2)) >> $log				
+						
+			x=$((${screenxy[0]}/2))
+			y=$((${screenxy[1]}/2))
+			
+			sleep 2			
+			xdotool mousemove $x $y
+                        xdotool getmouselocation >> $log			
 			
 			sleep 2
 			setxkbmap be
