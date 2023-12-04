@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# set defaults
+host=localhost
+port=1883
+config=fireplaced.conf
+log=fireplaced.log
+
+seat=seat0
+
+# get command line options
+while getopts c:l:h flag
+do
+    case "${flag}" in
+        c) config=${OPTARG};;
+        l) log=${OPTARG};;
+        h) 
+        	echo "help"
+        	exit 0
+        	;;
+    esac
+done
+echo "`date`      MQTT Fireplace listener started" >> $log
+
+# load configuration file if available
+source $config 2>/dev/null
+configLoaded=$? 
+if [ $configLoaded -eq 0 ]
+then
+	echo "`date`      Configuration file loaded" >> $log
+else
+	echo "`date`      Unable to load configuration file, using defaults" >> $log
+fi
+
+
+
+topic=$(echo "kitchen/fireplace")
+
+# wait for incomming messages
+while :
+do
+	msg=$(mosquitto_sub -h $host -p $port -u $username -P $password -C 1 -t "$topic")
+	if [ "$msg" == "start" ]
+	then
+		echo "`date`      Starting fireplace" >> $log
+
+		#loginctl lock-sessions also logs out lightdm
+		#sleep 0.5
+
+		# find lightdm session
+		lightdmSession=$(loginctl list-sessions | grep $seat | grep lightdm)
+
+		if [ -z "$lightdmSession" ]
+		then
+      			echo "\$var is empty"
+		      	# error TODO
+		else
+			# get the display lightdm is running on
+			IFS=' ' read -r -a array <<< "$lightdmSession"
+			display=$(loginctl show-session ${array[0]} --property=Display --value)
+			export DISPLAY=$display
+			# login fireplace
+			export XAUTHORITY=/var/lib/lightdm/.Xauthority
+			xdotool getmouselocation >> $log
+			xdotool mousemove 250 250
+                        xdotool getmouselocation >> $log	
+			sleep 2			
+			xdotool mousemove 300 300
+                        xdotool getmouselocation >> $log
+
+xdotool getactivewindow  >> $log
+xdotool getwindowfocus  >> $log
+xdotool getwindowname  >> $log
+xdotool getwindowpid  >> $log
+xdotool getwindowgeometry  >> $log
+xdotool getdisplaygeometry  >> $log
+
+
+			sleep 2
+			setxkbmap be
+                	xdotool type --clearmodifiers --delay 20 "fireplace" ;
+	                xdotool key --clearmodifiers --delay 20 Return ;
+        	        xdotool sleep 0.3 type --clearmodifiers --delay 20 "fireplace" ;
+        	        xdotool sleep 0.3 key --clearmodifiers --delay 20 Return
+		fi
+	elif [ "$msg" == "stop" ]
+	then
+                echo "`date`      Stopping fireplace" >> $log
+		loginctl terminate-user fireplace
+	fi
+
+done

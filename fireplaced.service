@@ -1,0 +1,11 @@
+[Unit]
+Description=fireplace - start and stop your fireplace by mqtt
+
+[Service]
+WorkingDirectory=/usr/lib/fireplaced 
+ExecStart=/usr/bin/fireplaced -c /etc/fireplaced/fireplaced.conf -l /var/log/fireplaced/fireplaced.log
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
