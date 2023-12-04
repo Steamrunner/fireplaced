@@ -59,31 +59,22 @@ do
 			IFS=' ' read -r -a array <<< "$lightdmSession"
 			display=$(loginctl show-session ${array[0]} --property=Display --value)
 			export DISPLAY=$display
-			# login fireplace
 			export XAUTHORITY=/var/lib/lightdm/.Xauthority
-			xdotool getmouselocation >> $log
-			xdotool mousemove 250 250
-                        xdotool getmouselocation >> $log	
-			sleep 2			
-			xdotool mousemove 300 300
-                        xdotool getmouselocation >> $log
-
-xdotool getdisplaygeometry  >> $log
 			IFS=' ' read -r -a screenxy <<< $(xdotool getdisplaygeometry)
-			echo "TEST x: " ${screenxy[0]} >> $log
-			echo "TEST y: " ${screenxy[1]} >> $log			
-			
+	
 			echo "TEST x: " $((${screenxy[0]}/2)) >> $log
 			echo "TEST y: " $((${screenxy[1]}/2)) >> $log				
 						
 			x=$((${screenxy[0]}/2))
 			y=$((${screenxy[1]}/2))
 			
-			sleep 2			
+			echo $x $y
+			
 			xdotool mousemove $x $y
                         xdotool getmouselocation >> $log			
 			
 			sleep 2
+			# login fireplace
 			setxkbmap be
                 	xdotool type --clearmodifiers --delay 20 "fireplace" ;
 	                xdotool key --clearmodifiers --delay 20 Return ;
