@@ -68,14 +68,10 @@ do
 			xdotool mousemove 300 300
                         xdotool getmouselocation >> $log
 
-xdotool getactivewindow  >> $log
-xdotool getwindowfocus  >> $log
-xdotool getwindowname  >> $log
-xdotool getwindowpid  >> $log
-xdotool getwindowgeometry  >> $log
 xdotool getdisplaygeometry  >> $log
-
-
+			IFS=' ' read -r -a screenxy <<< $(xdotool getdisplaygeometry)
+			echo $screenxy
+			
 			sleep 2
 			setxkbmap be
                 	xdotool type --clearmodifiers --delay 20 "fireplace" ;
