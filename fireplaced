@@ -70,7 +70,7 @@ do
 
 xdotool getdisplaygeometry  >> $log
 			IFS=' ' read -r -a screenxy <<< $(xdotool getdisplaygeometry)
-			echo "TEST: " + $screenxy
+			echo "TEST: " + $screenxy >> $log
 			
 			sleep 2
 			setxkbmap be
